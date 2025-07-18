@@ -23,7 +23,7 @@ exports.createStudent = async (req, res, next) => {
       fullName,
       gender,
       dob,
-      class: className,
+      class: studentClass,
       admissionNo,
       rollNo,
       academicYear,

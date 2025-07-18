@@ -29,6 +29,7 @@ app.use('/api/attendance', require('./routes/attendance'));
 app.use('/api/fees', require('./routes/fees'));
 app.use('/api/exams', require('./routes/exams'));
 app.use('/api/results', require('./routes/results'));
+app.use('/api/register', require('./routes/registration'));
 
 const errorHandler = require('./middleware/error/errorHandler');
 

@@ -29,6 +29,6 @@ router.put('/:id', [auth, roles('superadmin'), validateManagerUpdate], updateMan
 // @route   DELETE api/managers/:id
 // @desc    Delete manager by ID
 // @access  Private (Superadmin)
-router.delete('/:id', [auth, roles('superadmin')], deleteManager);
+router.delete('/:id', [auth, roles('school')], deleteManager);
 
 module.exports = router;

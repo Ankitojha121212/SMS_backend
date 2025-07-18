@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'School',
     required: function() {
-      return this.role !== 'superadmin';
+      return this.role !== 'school';
     },
   },
 });

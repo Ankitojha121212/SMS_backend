@@ -29,6 +29,6 @@ router.get('/', [auth, roles('manager')], getAllFees);
 // @route   DELETE api/fees/:id
 // @desc    Delete a fee record
 // @access  Private (Manager)
-router.delete('/:id', [auth, roles('manager')], deleteFee);
+router.delete('/:id', [auth, roles('school')], deleteFee);
 
 module.exports = router;

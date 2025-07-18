@@ -28,6 +28,6 @@ router.put('/:id', [auth, roles('teacher', 'manager'), validateUpdateResult], up
 // @route   DELETE api/results/:id
 // @desc    Delete a result record
 // @access  Private (Manager)
-router.delete('/:id', [auth, roles('manager')], deleteResult);
+router.delete('/:id', [auth, roles('school')], deleteResult);
 
 module.exports = router;

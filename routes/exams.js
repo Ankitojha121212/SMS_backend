@@ -29,6 +29,6 @@ router.put('/:id', [auth, roles('manager', 'teacher'), validateUpdateExam], upda
 // @route   DELETE api/exams/:id
 // @desc    Delete an exam
 // @access  Private (Manager)
-router.delete('/:id', [auth, roles('manager')], deleteExam);
+router.delete('/:id', [auth, roles('school')], deleteExam);
 
 module.exports = router;

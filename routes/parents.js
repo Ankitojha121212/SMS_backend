@@ -29,6 +29,6 @@ router.put('/:id', [auth, roles('manager'), validateParentUpdate], updateParent)
 // @route   DELETE api/parents/:id
 // @desc    Delete parent by ID
 // @access  Private (Manager)
-router.delete('/:id', [auth, roles('manager')], deleteParent);
+router.delete('/:id', [auth, roles('school')], deleteParent);
 
 module.exports = router;

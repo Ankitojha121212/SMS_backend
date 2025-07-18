@@ -24,6 +24,6 @@ router.get('/class/:class', [auth, roles('teacher', 'manager')], getAttendanceBy
 // @route   PUT api/attendance/:id
 // @desc    Update an attendance record
 // @access  Private (Teacher, Manager)
-router.put('/:id', [auth, roles('teacher', 'manager'), validateUpdateAttendance], updateAttendance);
+router.put('/:id', [auth, roles('teacher', 'school'), validateUpdateAttendance], updateAttendance);
 
 module.exports = router;
