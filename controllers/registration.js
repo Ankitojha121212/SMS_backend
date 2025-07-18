@@ -34,7 +34,9 @@ exports.completeRegistration = async (req, res) => {
             return res.status(404).json({ success: false, error: 'Registration not found' });
         }
 
-        registration.data = data;
+        // Exclude password and confirmPassword from being saved in registration data
+        const { password, confirmPassword, ...restOfData } = data;
+        registration.data = restOfData;
         registration.status = 'complete';
         await registration.save();
 

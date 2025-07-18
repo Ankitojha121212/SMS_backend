@@ -14,14 +14,14 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['student', 'teacher', 'parent', 'manager', 'superadmin'],
+    enum: ['student', 'teacher', 'parent', 'manager', 'school', 'superadmin'],
     required: true,
   },
   schoolId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'School',
     required: function() {
-      return this.role !== 'school';
+      return this.role !== 'superadmin';
     },
   },
 });

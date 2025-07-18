@@ -1,62 +1,48 @@
-
 const mongoose = require('mongoose');
 
 const StudentSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  schoolId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'School',
-    required: true,
-  },
-  fullName: {
-    type: String,
-    required: true,
-  },
-  gender: {
-    type: String,
-  },
-  dob: {
-    type: Date,
-  },
-  class: {
-    type: String,
-  },
-  admissionNo: {
-    type: String,
-  },
-  rollNo: {
-    type: String,
-  },
-  academicYear: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  address: {
-    type: String,
-  },
-  parentId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Parent',
-  },
-  transportOpted: {
-    type: Boolean,
-  },
-  hostelOpted: {
-    type: Boolean,
-  },
-  profilePhoto: {
-    type: String,
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
-});
+    schoolId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'School',
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    studentId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    classId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Class',
+    },
+    sectionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Section',
+    },
+    dateOfBirth: {
+        type: Date,
+    },
+    gender: {
+        type: String,
+        enum: ['Male', 'Female', 'Other'],
+    },
+    address: {
+        type: String,
+    },
+    contactNumber: {
+        type: String,
+    },
+    email: {
+        type: String,
+    },
+    parent: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Parent',
+    },
+}, { timestamps: true });
 
 module.exports = mongoose.model('Student', StudentSchema);
