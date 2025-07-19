@@ -1,70 +1,76 @@
 const Fee = require('../../models/Fee');
+const ErrorResponse = require('../../utils/errorResponse');
 
-// Add a new fee record
-exports.addFee = async (req, res) => {
+// @desc    Get all fees
+// @route   GET /api/admin/fees
+// @access  Private (School Admin)
+exports.getFees = async (req, res, next) => {
     try {
-        const { schoolId } = req.user; // From schoolAuth middleware
-        const newFee = new Fee({
-            ...req.body,
-            schoolId,
-        });
-        const fee = await newFee.save();
-        res.status(201).json({ success: true, data: fee });
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ success: false, error: err.message });
-    }
-};
-
-// Get all fee records for a school
-exports.getFees = async (req, res) => {
-    try {
-        const { schoolId } = req.user;
-        const fees = await Fee.find({ schoolId });
+        const fees = await Fee.find({ schoolId: req.user.schoolId }).populate('studentId', 'name class rollNumber');
         res.status(200).json({ success: true, data: fees });
     } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ success: false, error: err.message });
+        next(err);
     }
 };
 
-// Update a fee record
-exports.updateFee = async (req, res) => {
+// @desc    Create a fee
+// @route   POST /api/admin/fees
+// @access  Private (School Admin)
+exports.createFee = async (req, res, next) => {
     try {
-        const { schoolId } = req.user;
+        req.body.schoolId = req.user.schoolId;
+        const fee = await Fee.create(req.body);
+        res.status(201).json({ success: true, data: fee });
+    } catch (err) {
+        next(err);
+    }
+};
+
+// @desc    Update a fee
+// @route   PUT /api/admin/fees/:id
+// @access  Private (School Admin)
+exports.updateFee = async (req, res, next) => {
+    try {
         let fee = await Fee.findById(req.params.id);
 
-        if (!fee || fee.schoolId.toString() !== schoolId.toString()) {
-            return res.status(404).json({ success: false, error: 'Fee record not found or not authorized' });
+        if (!fee) {
+            return next(new ErrorResponse(`Fee not found with id of ${req.params.id}`, 404));
+        }
+
+        if (fee.schoolId.toString() !== req.user.schoolId) {
+            return next(new ErrorResponse(`User not authorized to update this fee`, 401));
         }
 
         fee = await Fee.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
-            runValidators: true,
+            runValidators: true
         });
 
         res.status(200).json({ success: true, data: fee });
     } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ success: false, error: err.message });
+        next(err);
     }
 };
 
-// Delete a fee record
-exports.deleteFee = async (req, res) => {
+// @desc    Delete a fee
+// @route   DELETE /api/admin/fees/:id
+// @access  Private (School Admin)
+exports.deleteFee = async (req, res, next) => {
     try {
-        const { schoolId } = req.user;
         const fee = await Fee.findById(req.params.id);
 
-        if (!fee || fee.schoolId.toString() !== schoolId.toString()) {
-            return res.status(404).json({ success: false, error: 'Fee record not found or not authorized' });
+        if (!fee) {
+            return next(new ErrorResponse(`Fee not found with id of ${req.params.id}`, 404));
         }
 
-        await fee.deleteOne();
+        if (fee.schoolId.toString() !== req.user.schoolId) {
+            return next(new ErrorResponse(`User not authorized to delete this fee`, 401));
+        }
+
+        await fee.remove();
 
         res.status(200).json({ success: true, data: {} });
     } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ success: false, error: err.message });
+        next(err);
     }
 };

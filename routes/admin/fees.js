@@ -1,17 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const schoolAuth = require('../../middleware/schoolAuth');
-const {
-    addFee,
-    getFees,
-    updateFee,
-    deleteFee,
-} = require('../../controllers/admin/fees');
+const { getFees, createFee, updateFee, deleteFee } = require('../../controllers/admin/fees');
+const { protect, schoolAdmin } = require('../../middleware/schoolAuth');
 
-// All fee routes are protected by schoolAuth middleware
-router.use(schoolAuth);
-
-router.route('/').post(addFee).get(getFees);
-router.route('/:id').put(updateFee).delete(deleteFee);
+router.route('/').get(protect, schoolAdmin, getFees).post(protect, schoolAdmin, createFee);
+router.route('/:id').put(protect, schoolAdmin, updateFee).delete(protect, schoolAdmin, deleteFee);
 
 module.exports = router;

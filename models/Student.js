@@ -10,38 +10,23 @@ const StudentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    studentId: {
+    class: {
         type: String,
         required: true,
-        unique: true,
     },
-    classId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Class',
+    rollNumber: {
+        type: String,
+        required: true,
     },
-    sectionId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Section',
-    },
-    dateOfBirth: {
-        type: Date,
+    section: {
+        type: String,
     },
     gender: {
         type: String,
         enum: ['Male', 'Female', 'Other'],
     },
-    address: {
-        type: String,
-    },
-    contactNumber: {
-        type: String,
-    },
-    email: {
-        type: String,
-    },
-    parent: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Parent',
+    dateOfBirth: {
+        type: Date,
     },
 }, { timestamps: true });
 

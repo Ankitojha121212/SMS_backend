@@ -15,20 +15,13 @@ const FeeSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    paid: {
+        type: Boolean,
+        default: false,
+    },
     dueDate: {
         type: Date,
         required: true,
-    },
-    paymentDate: {
-        type: Date,
-    },
-    status: {
-        type: String,
-        enum: ['Paid', 'Unpaid', 'Partially Paid'],
-        default: 'Unpaid',
-    },
-    description: {
-        type: String,
     },
 }, { timestamps: true });
 

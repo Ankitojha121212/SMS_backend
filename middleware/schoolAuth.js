@@ -1,25 +1,32 @@
 const jwt = require('jsonwebtoken');
+const School = require('../models/School');
+const ErrorResponse = require('../utils/errorResponse');
 
-module.exports = function (req, res, next) {
-    // Get token from header
-    const token = req.header('x-auth-token');
+exports.protect = async (req, res, next) => {
+    let token;
 
-    // Check if not token
-    if (!token) {
-        return res.status(401).json({ msg: 'No token, authorization denied' });
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
     }
 
-    // Verify token
+    if (!token) {
+        return next(new ErrorResponse('Not authorized to access this route', 401));
+    }
+
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded.user;
 
-        // Ensure the user has the 'school' role and schoolId is present
-        if (req.user.role !== 'school' || !req.user.schoolId) {
-            return res.status(403).json({ msg: 'Access denied. Not a school admin.' });
-        }
+        req.user = await School.findById(decoded.id);
+
         next();
     } catch (err) {
-        res.status(401).json({ msg: 'Token is not valid' });
+        return next(new ErrorResponse('Not authorized to access this route', 401));
     }
+};
+
+exports.schoolAdmin = (req, res, next) => {
+    if (req.user.role !== 'schoolAdmin') {
+        return next(new ErrorResponse('User is not a school admin', 401));
+    }
+    next();
 };

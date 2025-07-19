@@ -71,7 +71,7 @@ exports.registerSchool = async (req, res) => {
 
         // Create School entry first
         const school = new School({
-            schoolName,
+            name: schoolName,
             primaryPhone,
             alternatePhone,
             whatsappNumber,

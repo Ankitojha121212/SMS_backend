@@ -1,17 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const schoolAuth = require('../../middleware/schoolAuth');
-const {
-    addStudent,
-    getStudents,
-    updateStudent,
-    deleteStudent,
-} = require('../../controllers/admin/students');
+const { getStudents, createStudent, updateStudent, deleteStudent } = require('../../controllers/admin/students');
+const { protect, schoolAdmin } = require('../../middleware/schoolAuth');
 
-// All student routes are protected by schoolAuth middleware
-router.use(schoolAuth);
-
-router.route('/').post(addStudent).get(getStudents);
-router.route('/:id').put(updateStudent).delete(deleteStudent);
+router.route('/').get(protect, schoolAdmin, getStudents).post(protect, schoolAdmin, createStudent);
+router.route('/:id').put(protect, schoolAdmin, updateStudent).delete(protect, schoolAdmin, deleteStudent);
 
 module.exports = router;
